@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Satisfação - Gelato Ranch</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #e6f0ff; /* Azul clarinho */
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            /* Padrão zebrado sutil no fundo */
+            background-image: repeating-linear-gradient(45deg, rgba(0,102,204,0.05) 0px, rgba(0,102,204,0.05) 20px, rgba(255,255,255,0.2) 20px, rgba(255,255,255,0.2) 40px);
+        }
+        .container {
+            background: white;
+            max-width: 700px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #0066cc; /* Azul */
+            position: relative;
+            overflow: hidden;
+        }
+        /* Detalhe zebrado no canto superior direito */
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: repeating-linear-gradient(45deg, #0066cc 0px, #0066cc 10px, white 10px, white 20px);
+            opacity: 0.1;
+            border-radius: 0 0 0 50px;
+            pointer-events: none;
+        }
+        h1 {
+            color: #0066cc; /* Azul */
+            text-align: center;
+            margin-top: 0;
+            font-size: 28px;
+        }
+        h2 {
+            color: #004080; /* Azul mais escuro */
+            text-align: center;
+            margin-top: 0;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px; /* Ajuste este valor para mudar o tamanho da logo */
+            height: auto;
+        }
+        .pergunta {
+            margin-bottom: 25px;
+        }
+        .pergunta label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .notas {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .notas label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            background: #f0f7ff; /* Azul claríssimo */
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 0;
+            border: 1px solid #b8d9ff; /* Azul claro */
+        }
+        .notas label:hover {
+            background: #cce4ff; /* Azul mais presente */
+        }
+        .notas input[type="radio"] {
+            accent-color: #0066cc; /* Azul */
+            transform: scale(1.1);
+            margin: 0;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #0066cc; /* Azul */
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #004080; /* Azul escuro */
+        }
+        button.limpar {
+            background: #7aaae0; /* Azul médio */
+            margin-top: 10px;
+        }
+        button.limpar:hover {
+            background: #0066cc; /* Azul */
+        }
+        hr {
+            margin: 30px 0 20px;
+            border: 1px solid #eee;
+        }
+        .resumo {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        #resumoConteudo {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin: 15px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        #agradecimento {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        .feedback-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .feedback-item:last-child {
+            border-bottom: none;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+        .destaque {
+            background: #e0f0ff; /* Azul bem clarinho */
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="logo_gelato.jpeg" alt="Logo Gelato Ranch">
+        </div>
+        <h1>Gelato Ranch</h1>
+        <h2>Pesquisa de Satisfação</h2>
+        
+        <div class="destaque">
+            Sua opinião é essencial para melhorarmos nossos gelatos artesanais!
+        </div>
+
+        <form id="feedbackForm">
+            <!-- Pergunta 1: Indicaria? -->
+            <div class="pergunta">
+                <label>🍦 De 1 a 5, o quanto você indicaria a Gelato Ranch para amigos?</label>
+                <div class="notas">
+                    <label><input type="radio" name="indicaria" value="1" required> 1</label>
+                    <label><input type="radio" name="indicaria" value="2"> 2</label>
+                    <label><input type="radio" name="indicaria" value="3"> 3</label>
+                    <label><input type="radio" name="indicaria" value="4"> 4</label>
+                    <label><input type="radio" name="indicaria" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 2: Atendimento -->
+            <div class="pergunta">
+                <label>👥 De 1 a 5, como você avalia o atendimento da nossa equipe?</label>
+                <div class="notas">
+                    <label><input type="radio" name="atendimento" value="1" required> 1</label>
+                    <label><input type="radio" name="atendimento" value="2"> 2</label>
+                    <label><input type="radio" name="atendimento" value="3"> 3</label>
+                    <label><input type="radio" name="atendimento" value="4"> 4</label>
+                    <label><input type="radio" name="atendimento" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 3: Qualidade do Gelato -->
+            <div class="pergunta">
+                <label>🍨 De 1 a 5, como você avalia a qualidade dos nossos gelatos (sabor, cremosidade, temperatura)?</label>
+                <div class="notas">
+                    <label><input type="radio" name="gelato" value="1" required> 1</label>
+                    <label><input type="radio" name="gelato" value="2"> 2</label>
+                    <label><input type="radio" name="gelato" value="3"> 3</label>
+                    <label><input type="radio" name="gelato" value="4"> 4</label>
+                    <label><input type="radio" name="gelato" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 4: Variedade de sabores -->
+            <div class="pergunta">
+                <label>🌈 De 1 a 5, como você avalia a variedade de sabores disponíveis?</label>
+                <div class="notas">
+                    <label><input type="radio" name="variedade" value="1" required> 1</label>
+                    <label><input type="radio" name="variedade" value="2"> 2</label>
+                    <label><input type="radio" name="variedade" value="3"> 3</label>
+                    <label><input type="radio" name="variedade" value="4"> 4</label>
+                    <label><input type="radio" name="variedade" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 5: Entrega (Delivery) - importante para gelato que derrete -->
+            <div class="pergunta">
+                <label>🛵 De 1 a 5, como você avalia a entrega (embalagem, pontualidade, conservação do gelato)?</label>
+                <div class="notas">
+                    <label><input type="radio" name="entrega" value="1" required> 1</label>
+                    <label><input type="radio" name="entrega" value="2"> 2</label>
+                    <label><input type="radio" name="entrega" value="3"> 3</label>
+                    <label><input type="radio" name="entrega" value="4"> 4</label>
+                    <label><input type="radio" name="entrega" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 6: Ambiente (se consumiu no local) -->
+            <div class="pergunta">
+                <label>🏠 De 1 a 5, como você avalia o ambiente e conforto da loja?</label>
+                <div class="notas">
+                    <label><input type="radio" name="ambiente" value="1" required> 1</label>
+                    <label><input type="radio" name="ambiente" value="2"> 2</label>
+                    <label><input type="radio" name="ambiente" value="3"> 3</label>
+                    <label><input type="radio" name="ambiente" value="4"> 4</label>
+                    <label><input type="radio" name="ambiente" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Pergunta 7: Açaí -->
+            <div class="pergunta">
+                <label>🥣 De 1 a 5, como você avalia nosso açaí (sabor, textura, acompanhamentos)?</label>
+                <div class="notas">
+                    <label><input type="radio" name="acai" value="1" required> 1</label>
+                    <label><input type="radio" name="acai" value="2"> 2</label>
+                    <label><input type="radio" name="acai" value="3"> 3</label>
+                    <label><input type="radio" name="acai" value="4"> 4</label>
+                    <label><input type="radio" name="acai" value="5"> 5</label>
+                </div>
+            </div>
+
+            <!-- Campo de melhorias -->
+            <div class="pergunta">
+                <label for="melhorias">💡 O que poderíamos melhorar? (sugestões são bem-vindas!)</label>
+                <textarea id="melhorias" name="melhorias" rows="4" placeholder="Ex: mais sabores, atendimento mais rápido, opções sem lactose..."></textarea>
+            </div>
+
+            <!-- Onde consumiu? -->
+            <div class="pergunta">
+                <label for="local">📍 Onde você consumiu? (opcional)</label>
+                <input type="text" id="local" name="local" placeholder="Ex: Mesa 3, Balcão, Delivery, Parque">
+            </div>
+
+            <button type="submit">Enviar Feedback</button>
+        </form>
+
+        <div id="agradecimento" class="hidden"></div>
+
+        <hr>
+
+        <div class="resumo">
+            <h2>Resumo das Avaliações</h2>
+            <button id="verResumo" type="button">Atualizar Resumo</button>
+            <div id="resumoConteudo"></div>
+            <button id="limparDados" class="limpar" type="button">Limpar Todos os Dados</button>
+        </div>
+        
+        <div class="footer">
+            <span>🍦 Gelato Ranch - O verdadeiro gelato italiano!</span>
+        </div>
+    </div>
+
+    <script>
+        // Chave para armazenamento no localStorage
+        const STORAGE_KEY = 'feedbacks_gelato_ranch';
+
+        // --- Funções auxiliares ---
+        function carregarFeedbacks() {
+            const dados = localStorage.getItem(STORAGE_KEY);
+            return dados ? JSON.parse(dados) : [];
+        }
+
+        function salvarFeedback(feedback) {
+            const feedbacks = carregarFeedbacks();
+            feedbacks.push(feedback);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbacks));
+        }
+
+        function limparTodosFeedbacks() {
+            localStorage.removeItem(STORAGE_KEY);
+        }
+
+        function calcularResumo() {
+            const feedbacks = carregarFeedbacks();
+            if (feedbacks.length === 0) {
+                return {
+                    total: 0,
+                    mediaIndicaria: null,
+                    mediaAtendimento: null,
+                    mediaGelato: null,
+                    mediaVariedade: null,
+                    mediaEntrega: null,
+                    mediaAmbiente: null,
+                    mediaAcai: null,
+                    ultimos: []
+                };
+            }
+
+            let somaIndicaria = 0;
+            let somaAtendimento = 0;
+            let somaGelato = 0;
+            let somaVariedade = 0;
+            let somaEntrega = 0;
+            let somaAmbiente = 0;
+            let somaAcai = 0;
+
+            feedbacks.forEach(f => {
+                somaIndicaria += f.indicaria;
+                somaAtendimento += f.atendimento;
+                somaGelato += f.gelato;
+                somaVariedade += f.variedade;
+                somaEntrega += f.entrega;
+                somaAmbiente += f.ambiente;
+                somaAcai += f.acai || 0; // Adicionado para compatibilidade com dados antigos
+            });
+
+            return {
+                total: feedbacks.length,
+                mediaIndicaria: (somaIndicaria / feedbacks.length).toFixed(2),
+                mediaAtendimento: (somaAtendimento / feedbacks.length).toFixed(2),
+                mediaGelato: (somaGelato / feedbacks.length).toFixed(2),
+                mediaVariedade: (somaVariedade / feedbacks.length).toFixed(2),
+                mediaEntrega: (somaEntrega / feedbacks.length).toFixed(2),
+                mediaAmbiente: (somaAmbiente / feedbacks.length).toFixed(2),
+                mediaAcai: (somaAcai / feedbacks.length).toFixed(2),
+                ultimos: feedbacks.slice(-5).reverse()
+            };
+        }
+
+        function exibirResumo() {
+            const resumo = calcularResumo();
+            const conteudo = document.getElementById('resumoConteudo');
+            
+            if (resumo.total === 0) {
+                conteudo.innerHTML = '<p style="text-align:center; color:#777;">Nenhum feedback registrado ainda.</p>';
+                return;
+            }
+
+            let html = `
+                <p><strong>Total de respostas:</strong> ${resumo.total}</p>
+                <p><strong>Média de indicação:</strong> ${resumo.mediaIndicaria} / 5 🍦</p>
+                <p><strong>Média de atendimento:</strong> ${resumo.mediaAtendimento} / 5 👥</p>
+                <p><strong>Média do gelato:</strong> ${resumo.mediaGelato} / 5 🍨</p>
+                <p><strong>Média da variedade:</strong> ${resumo.mediaVariedade} / 5 🌈</p>
+                <p><strong>Média da entrega:</strong> ${resumo.mediaEntrega} / 5 🛵</p>
+                <p><strong>Média do ambiente:</strong> ${resumo.mediaAmbiente} / 5 🏠</p>
+                <p><strong>Média do açaí:</strong> ${resumo.mediaAcai} / 5 🥣</p>
+                <hr>
+                <p><strong>Últimos 5 feedbacks:</strong></p>
+            `;
+
+            resumo.ultimos.forEach((fb, index) => {
+                const data = new Date(fb.data).toLocaleString('pt-BR');
+                html += `
+                    <div class="feedback-item">
+                        <small>${data} ${fb.local ? '- ' + fb.local : ''}</small><br>
+                        🍦 ${fb.indicaria} | 👥 ${fb.atendimento} | 🍨 ${fb.gelato} | 🌈 ${fb.variedade} | 🛵 ${fb.entrega} | 🏠 ${fb.ambiente} | 🥣 ${fb.acai || 'N/A'}<br>
+                        <em>"${fb.melhorias || 'Sem sugestões'}"</em>
+                    </div>
+                `;
+            });
+
+            conteudo.innerHTML = html;
+        }
+
+        // --- Eventos ---
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Capturar valores
+            const indicaria = document.querySelector('input[name="indicaria"]:checked')?.value;
+            const atendimento = document.querySelector('input[name="atendimento"]:checked')?.value;
+            const gelato = document.querySelector('input[name="gelato"]:checked')?.value;
+            const variedade = document.querySelector('input[name="variedade"]:checked')?.value;
+            const entrega = document.querySelector('input[name="entrega"]:checked')?.value;
+            const ambiente = document.querySelector('input[name="ambiente"]:checked')?.value;
+            const acai = document.querySelector('input[name="acai"]:checked')?.value;
+            const melhorias = document.getElementById('melhorias').value.trim();
+            const local = document.getElementById('local').value.trim();
+
+            if (!indicaria || !atendimento || !gelato || !variedade || !entrega || !ambiente || !acai) {
+                alert('Por favor, selecione todas as notas antes de enviar.');
+                return;
+            }
+
+            // Criar objeto de feedback
+            const feedback = {
+                indicaria: parseInt(indicaria),
+                atendimento: parseInt(atendimento),
+                gelato: parseInt(gelato),
+                variedade: parseInt(variedade),
+                entrega: parseInt(entrega),
+                ambiente: parseInt(ambiente),
+                acai: parseInt(acai),
+                melhorias: melhorias,
+                local: local,
+                data: new Date().toISOString()
+            };
+
+            // Salvar
+            salvarFeedback(feedback);
+
+            // Exibir agradecimento
+            const divAgradecimento = document.getElementById('agradecimento');
+            divAgradecimento.textContent = 'Obrigado por avaliar a Gelato Ranch! Sua opinião nos ajuda a servir gelatos ainda mais incríveis! 🍦';
+            divAgradecimento.classList.remove('hidden');
+
+            // Limpar formulário
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
+            document.getElementById('melhorias').value = '';
+            document.getElementById('local').value = '';
+
+            // Esconder mensagem após 5 segundos
+            setTimeout(() => {
+                divAgradecimento.classList.add('hidden');
+            }, 5000);
+
+            // Atualizar resumo
+            exibirResumo();
+        });
+
+        document.getElementById('verResumo').addEventListener('click', exibirResumo);
+
+        document.getElementById('limparDados').addEventListener('click', function() {
+
+            const SENHA_ADMIN = '238500';
+            const senhaDigitada = prompt('Para apagar os dados, digite a senha de administrador:');
+
+            if (senhaDigitada === SENHA_ADMIN) {
+                if (confirm('Tem certeza que deseja apagar TODOS os feedbacks? Esta ação não pode ser desfeita.')) {
+                    limparTodosFeedbacks();
+                    exibirResumo();
+                    document.getElementById('agradecimento').classList.add('hidden');
+                    alert('Dados apagados com sucesso.');
+                }
+            } else if (senhaDigitada !== null) { // Não mostra alerta se o usuário clicar em "Cancelar"
+                alert('Senha incorreta. A operação foi cancelada.');
+            }
+        });
+
+        // Mostrar resumo ao carregar a página
+        window.addEventListener('load', exibirResumo);
+    </script>
+</body>
+</html>
